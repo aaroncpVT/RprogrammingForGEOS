@@ -1,0 +1,16 @@
+library(raster)
+
+shp <- shapefile('./inputdata/watersheds.shp')
+n.list <- as.list(shp$HUC8)
+
+
+dem <- raster('./inputdata/dem.tif') 
+nlcd <- raster('./inputdata/nlcd2001.tif')
+
+
+for(i in 1:6){
+  dir.create(paste0('./w', n.list[i]))
+  clip <- shp[i,]
+  dem.clip <- crop(dem, clip)
+  writeRaster(dem.clip, paste0('demsub_', n.list[i], '.tif'))
+}
